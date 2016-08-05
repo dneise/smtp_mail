@@ -1,0 +1,1 @@
+from .mymail import MyMail

@@ -1,0 +1,13 @@
+{
+    "default_sender": "you@host.com",
+    "smtp":{
+        "host": "host",
+        "port": 465,
+        "username": "username",
+        "password": "secret"
+    },
+    "contacts":{
+        "mom": "your_mother@host.com",
+        "me": "you@host.com"
+    }
+}
