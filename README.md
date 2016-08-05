@@ -31,7 +31,7 @@ If you do not need to authentify yourself:
       "default_sender": "me@host.com",
       "smtp":{
           "host": "smtp",
-          "port": 465,
+          "port": 465
       },
       "contacts":{
       }
