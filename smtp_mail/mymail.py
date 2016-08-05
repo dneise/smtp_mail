@@ -45,14 +45,18 @@ class MyMail:
             subject, 
             recipients, 
             sender=config["default_sender"],
-            body=""
+            body="",
+            attachments=None,
             ):
         self.subject = subject
         recipients = [r if r not in config["contacts"] else config["contacts"][r] for r in recipients]
         self.recipients = recipients
         self.body = body
         self.sender = sender
-        self.attachments = []
+        if attachments is None
+            self.attachments = []
+        else:
+            self.attachments = attachments
 
     def send(self):
         msg = MIMEMultipart()
