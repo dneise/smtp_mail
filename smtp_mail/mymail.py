@@ -53,7 +53,7 @@ class MyMail:
         self.recipients = recipients
         self.body = body
         self.sender = sender
-        if attachments is None
+        if attachments is None:
             self.attachments = []
         else:
             self.attachments = attachments
