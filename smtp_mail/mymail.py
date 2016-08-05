@@ -68,7 +68,8 @@ class MyMail:
         msg.attach(MIMEText(self.body, 'plain'))
         
         s = smtplib.SMTP_SSL(config["smtp"]["host"], config["smtp"]["port"])
-        s.login(config["smtp"]["username"], config["smtp"]["password"])
+        if "password" in config["smtp"]:
+            s.login(config["smtp"]["username"], config["smtp"]["password"])
         s.sendmail(self.sender, self.recipients, msg.as_string())
         s.quit()
     
