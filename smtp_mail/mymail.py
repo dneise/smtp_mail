@@ -17,6 +17,27 @@ from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.text import MIMEText
 
+import time
+
+config_file_path = os.path.join(os.environ['HOME'], '.smtp_mail', "config.json")
+
+def copy_template_to_config_path():
+    _ROOT = os.path.abspath(os.path.dirname(__file__))
+    copy(
+        src=os.path.join(_ROOT, 'config.json_template'),
+        dst=config_file_path
+    )
+
+def read_config_file():
+    if not os.path.isfile(config_file_path):
+        os.makedirs(os.path.dirname(config_file_path), exist_ok=True)
+        copy_template_to_config_path()
+
+    with open(config_file_path, "r") as config_file:
+        config = json.load(config_file)
+    return config
+
+
 config = read_config_file()
 
 class MyMail:
@@ -27,14 +48,10 @@ class MyMail:
             body=""
             ):
         self.subject = subject
-        recipients = [r if r not in config["contacs"] else config["contacts"][r] for r in recipients]
+        recipients = [r if r not in config["contacts"] else config["contacts"][r] for r in recipients]
         self.recipients = recipients
         self.body = body
         self.sender = sender
-        self.username_pw = (
-            config["smtp"]["username"], 
-            config["smtp"]["password"]
-        ),
         self.attachments = []
 
     def send(self):
@@ -51,7 +68,7 @@ class MyMail:
         msg.attach(MIMEText(self.body, 'plain'))
         
         s = smtplib.SMTP_SSL(config["smtp"]["host"], config["smtp"]["port"])
-        s.login(*self.username_pw)
+        s.login(config["smtp"]["username"], config["smtp"]["password"])
         s.sendmail(self.sender, self.recipients, msg.as_string())
         s.quit()
     
@@ -94,19 +111,3 @@ class MyMail:
         self.attachments = self.attachments + files
 
 
-config_file_path = os.path.join(os.environ['HOME'], '.smtp_mail', "config.json")
-
-def copy_template_to_config_path():
-    _ROOT = os.path.abspath(os.path.dirname(__file__))
-    copy(
-        src=os.path.join(_ROOT, 'config.json_template'),
-        dst=config_file_path
-    )
-
-def read_config_file():
-    if not os.path.isfile(config_file_path):
-        copy_template_to_config_path()
-
-    with open(config_file_path, "r") as config_file:
-        confg = json.load(config_file)
-    return config
